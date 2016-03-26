@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.flatironschool.javacs;
 
@@ -17,9 +17,9 @@ import java.util.ListIterator;
 public class MyArrayList<E> implements List<E> {
 	int size;                    // keeps track of the number of elements
 	private E[] array;           // stores the elements
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public MyArrayList() {
 		// You can't instantiate an array of T[], but you can instantiate an
@@ -39,7 +39,7 @@ public class MyArrayList<E> implements List<E> {
 		mal.add(2);
 		mal.add(3);
 		System.out.println(Arrays.toString(mal.toArray()) + " size = " + mal.size);
-		
+
 		mal.remove(new Integer(2));
 		System.out.println(Arrays.toString(mal.toArray()) + " size = " + mal.size);
 	}
@@ -51,7 +51,7 @@ public class MyArrayList<E> implements List<E> {
 			E[] bigger = (E[]) new Object[array.length * 2];
 			System.arraycopy(array, 0, bigger, 0, array.length);
 			array = bigger;
-		} 
+		}
 		array[size] = element;
 		size++;
 		return true;
@@ -63,6 +63,11 @@ public class MyArrayList<E> implements List<E> {
 			throw new IndexOutOfBoundsException();
 		}
 		// TODO: fill in the rest of this method
+		size++;
+		for(int i = size - 1; i > index; i--) {
+			array[i] = array[i-1];
+		}
+		array[index] = element;
 	}
 
 	@Override
@@ -112,13 +117,19 @@ public class MyArrayList<E> implements List<E> {
 	@Override
 	public int indexOf(Object target) {
 		// TODO: fill in this method
-		return 0;
+		for(int i = 0; i < size; i++) {
+			if(equals(array[i], target)) {
+				return i;
+			}
+		}
+		return -1;
+		//return 0;
 	}
 
 	/** Checks whether an element of the array is the target.
-	 * 
+	 *
 	 * Handles the special case that the target is null.
-	 * 
+	 *
 	 * @param target
 	 * @param object
 	 */
@@ -183,7 +194,16 @@ public class MyArrayList<E> implements List<E> {
 	@Override
 	public E remove(int index) {
 		// TODO: fill in this method.
-		return null;
+		if(index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		E prevE = array[index];
+		for(int i = index; i < size; i++) {
+			array[i] = array[i + 1];
+		}
+		size--;
+		return prevE;
+		//return null;
 	}
 
 	@Override
@@ -203,7 +223,13 @@ public class MyArrayList<E> implements List<E> {
 	@Override
 	public E set(int index, E element) {
 		// TODO: fill in this method.
-		return null;
+		if(index < 0 || index >= size) {
+				throw new IndexOutOfBoundsException();
+		}
+		E prevE = array[index];
+		array[index] = element;
+		return prevE;
+		//return null;
 	}
 
 	@Override
@@ -227,6 +253,6 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public <T> T[] toArray(T[] array) {
-		throw new UnsupportedOperationException();		
+		throw new UnsupportedOperationException();
 	}
 }
